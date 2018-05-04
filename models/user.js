@@ -3,11 +3,11 @@ const Schema = mongoose.Schema
 const bcrypt = require('bcryptjs')
 
 const userSchema = new Schema({
-  username: { type: string, unique: true },
-  email: { type: string, required: true, unique: true },
-  password: { type: string, required: true },
-  firstName: string,
-  lastName: string
+  username: { type: String, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  firstName: String,
+  lastName: String
 })
 
 const User = module.exports = mongoose.model('User', userSchema);
