@@ -4,6 +4,32 @@ const app = express()
 const path = require('path')
 const { PORT, DB_URL } = require('./config')
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+const passport = require('./models/passport')
+
+
+
+// MIDDLEWARES
+app.use(
+  bodyParser.urlencoded({ extended: false })
+)
+app.use(bodyParser.json())
+app.use(
+  session({
+    secret: process.env.APP_SECRET || '6PC# 1ID( 0WE$ 761~',
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    resave: false,
+    saveUninitialized: false
+  })
+)
+
+
+
+// PASSPORT
+app.use(passport.initialize())
+app.use(passport.session())
 
 
 
