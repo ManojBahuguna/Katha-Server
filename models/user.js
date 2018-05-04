@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 const bcrypt = require('bcryptjs')
 
 const userSchema = new Schema({
-  username: { type: string, required: true, unique: true },
+  username: { type: string, unique: true },
   email: { type: string, required: true, unique: true },
   password: { type: string, required: true },
   firstName: string,
@@ -13,6 +13,8 @@ const userSchema = new Schema({
 const User = module.exports = mongoose.model('User', userSchema);
 
 module.exports.getById = User.findById;
+
+module.exports.getByEmail = email => User.findOne({ email })
 
 module.exports.getByUsername = username => User.findOne({ username })
 
