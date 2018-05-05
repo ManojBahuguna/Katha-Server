@@ -8,6 +8,7 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
 const passport = require('./models/passport')
+const user = require('./routes/user')
 
 
 
@@ -35,6 +36,7 @@ app.use(passport.session())
 
 // ROUTES
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/user', user)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'))
 })
