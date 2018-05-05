@@ -15,16 +15,19 @@ passport.deserializeUser((id, done) => {
 // STRATEGIES
 passport.use(new LocalStrategy(
   { usernameField: 'email' },
-  function (email, password, done) {
+  (email, password, done) => {
     User.findOne({ email }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect email.' })
-      }
-      if (!User.comparePassword(password, user.password)) {
-        return done(null, false, { message: 'Incorrect password.' })
-      }
-      return done(null, user)
+      if (err) return done(err)
+      
+      if (!user)
+        return done(null, false, 'User not found!')
+
+      User.comparePassword(password, user.password).then(isValid => {
+        if (isValid)
+          return done(null, user, 'Login Successfull!')
+
+        return done(null, false, 'Incorrect password!')
+      })
     });
   }
 ))

@@ -10,15 +10,21 @@ router.post('/register', (req, res, next) => {
   }).then(user => {
     res.json({ success: true, msg: 'Successfully Registered!', user })
   }).catch(err => {
-    console.error(err)
+    if (err.code === 11000)
+      return res.json({ success: false, msg: 'Email already exists! Please Login.' })
     res.json({ success: false, msg: 'Failed to Register!' })
   })
 });
 
-router.post('/login', passport.authenticate('local', {
-  successRedirect : '/',
-  failureRedirect : '/login',
-  failureFlash : true
-}));
+router.post('/login', (req, res) => {
+  passport.authenticate('local', (err, user, message) => {
+    if (err)
+      res.status(400).json({ success: false, message: err })
+    else if (!user)
+      res.status(401).json({ success: false, message })
+    else
+      res.json({ success: true, user, message })
+  })(req, res)
+})
 
 module.exports = router;
